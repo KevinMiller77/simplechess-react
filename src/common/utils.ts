@@ -1,4 +1,4 @@
-import { EchoMessage, ErrorMessage, HandshakeMessage, HandshakeRequestMessage, Message, MessageTypeEnum } from "./enums";
+import { Message } from "./enums";
 
 export function parseMessage(message: string): Message | undefined {
     try {
