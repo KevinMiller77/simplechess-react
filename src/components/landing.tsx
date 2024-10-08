@@ -40,7 +40,7 @@ class Landing extends Component<LandingProps, LandingState> {
             userId: user.userId,
             client: new ChessConnectionClient(
               {
-                host: 'ws://54.81.109.13:8765',
+                host: 'ws://54.198.193.86:8765',
                 userId: user.userId,
                 handleMessage: this.handleMessage,
               }
