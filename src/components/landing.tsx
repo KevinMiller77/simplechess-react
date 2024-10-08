@@ -5,7 +5,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import { getCurrentUser, signOut } from 'aws-amplify/auth';
 import { ChessConnectionClient } from '../logic/websocket-client';
 import { Hub } from 'aws-amplify/utils';
-import { Message, MessageTypeEnum, MoveMessage, ReconnectedMessage, ReconnectionState, SimpleMove, StartGameMessage } from '../../../common/enums';
+import { Message, MessageTypeEnum, MoveMessage, ReconnectedMessage, ReconnectionState, SimpleMove, StartGameMessage } from '../common/enums';
 import { Chess, Color } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Chess, Color } from 'chess.js';
-import { SimpleMove } from '../../../common/enums';
+import { SimpleMove } from '../common/enums';
 
 type GameBoardState = {
   inProgress: boolean;
