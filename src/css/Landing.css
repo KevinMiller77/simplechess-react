@@ -1,0 +1,105 @@
+/* Landing.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .App {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .Landing-container {
+    display: flex;
+    flex: 1;
+  }
+  
+  .Landing-sidebar {
+    width: 240px;
+    background-color: #212121;
+    color: #ffffff;
+    padding-top: 20px;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .Landing-sidebar .react-tabs__tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .Landing-sidebar .react-tabs__tab {
+    padding: 15px;
+    cursor: pointer;
+    color: #ffffff;
+    border-bottom: 1px solid #424242;
+    transition: background-color 0.3s;
+  }
+  
+  .Landing-sidebar .react-tabs__tab--selected {
+    background-color: #424242;
+    font-weight: bold;
+  }
+  
+  .Landing-sidebar .react-tabs__tab:hover {
+    background-color: #333333;
+  }
+  
+  .Landing-content {
+    margin-left: 240px;
+    padding: 20px;
+    flex: 1;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+  }
+  
+  button {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+  }
+  
+  button:hover {
+    background-color: #e60000;
+  }
+  
+  h1 {
+    background-color: #212121;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  ul li {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  ul li:hover {
+    background-color: #f1f1f1;
+  }
