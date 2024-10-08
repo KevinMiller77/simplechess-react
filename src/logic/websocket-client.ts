@@ -1,4 +1,4 @@
-import { HandshakeMessage, Message, MessageTypeEnum, JoinGameQueueMessage as JoinPoolMessage, SimpleMove, MoveMessage } from "../../../common/enums";
+import { HandshakeMessage, Message, MessageTypeEnum, JoinGameQueueMessage as JoinPoolMessage, SimpleMove, MoveMessage, ResignMessage } from "../../../common/enums";
 import { parseMessage, stringifyMessage } from "../../../common/utils";
 
 interface WebSocketClientProps {
@@ -28,6 +28,10 @@ export class ChessConnectionClient {
 
   makeMove(move: SimpleMove) {
     this.send(new MoveMessage(move));
+  }
+
+  resign() {
+    this.send(new ResignMessage());
   }
 
   close() {

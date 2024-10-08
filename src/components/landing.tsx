@@ -40,7 +40,7 @@ class Landing extends Component<LandingProps, LandingState> {
             userId: user.userId,
             client: new ChessConnectionClient(
               {
-                host: 'ws://localhost:8765',
+                host: 'ws://54.81.109.13:8765',
                 userId: user.userId,
                 handleMessage: this.handleMessage,
               }
@@ -101,11 +101,12 @@ class Landing extends Component<LandingProps, LandingState> {
       if (msg.data.state === ReconnectionState.IN_POOL) {
         this.setState({ queueing: true });
       } else {
-        const { fen } = msg.data;
+        const { fen, color } = msg.data;
         this.setState(
           { 
             inGame: true,
             game: new Chess(fen),
+            playerColor: color!,
           }
         );
       }
@@ -131,6 +132,18 @@ class Landing extends Component<LandingProps, LandingState> {
       if (game) {
         this.makeMove(msg.data);
       }
+    }
+
+    if (message.type === MessageTypeEnum.RESIGN) {
+      console.log('Received resign message');
+      alert('Your opponent resigned! You won!');
+
+      this.setState({
+        queueing: false,
+        inGame: false,
+        game: new Chess(),
+        playerColor: 'w',
+      });
     }
   }
 
@@ -158,11 +171,48 @@ class Landing extends Component<LandingProps, LandingState> {
 
   makeMove = (move: SimpleMove) => {
     const { game } = this.state;
+    const turn = game?.turn()
     const result = game?.move(move);
     if (result != null) {
       this.setState({ game });
     }
+
+    if (game?.isCheckmate()) {
+      if (turn === this.state.playerColor) {
+        alert('Checkmate! You won!');
+      } else {
+        alert('Checkmate! You lost!'); 
+      }
+      console.log('Checkmate!');
+      this.setState({
+        queueing: false,
+        inGame: false,
+        game: new Chess(),
+        playerColor: 'w',
+      });
+    }
+    if (game?.isDraw()) {
+      alert('Draw!');
+      console.log('Draw!');
+      this.setState({
+        queueing: false,
+        inGame: false,
+        game: new Chess(),
+        playerColor: 'w',
+      });
+    }
   };
+
+  resign = () => {
+    this.state.client?.resign();
+    alert('You resigned! You lost!');
+    this.setState({
+      queueing: false,
+      inGame: false,
+      game: new Chess(),
+      playerColor: 'w',
+    });
+  }
 
   renderChessboard = () => {
     const { game, playerColor } = this.state;
@@ -172,7 +222,13 @@ class Landing extends Component<LandingProps, LandingState> {
             position={game.fen()}
             onPieceDrop={this.onDrop}
             boardOrientation={playerColor === 'w' ? 'white' : 'black'}
+            arePremovesAllowed={true}
+            areArrowsAllowed={true}
+            showBoardNotation={true}
+            showPromotionDialog={true}
+            
             />
+        <button onClick={ this.resign }> Resign (No confirmation) </button>
       </div>
     );
   };
