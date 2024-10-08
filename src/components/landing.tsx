@@ -59,7 +59,7 @@ class Landing extends Component<LandingProps, LandingState> {
               userId: payload.data.userId,
               client: new ChessConnectionClient(
                 {
-                  host: 'ws://localhost:8765',
+                  host: 'ws://54.198.193.86:8765',
                   userId: payload.data.userId,
                   handleMessage: () => console.log('Message received'),
                 }
