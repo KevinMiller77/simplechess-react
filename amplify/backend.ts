@@ -11,7 +11,7 @@ new FargateStack(
   wsServerStack, 
   'FargateStack',
   {
-    stage: "local", // MOVE TO SECRET
+    stage: process.env.STAGE ?? "local",
     hostedZoneId: "Z048431835AMVHOKJWVE8",
     hostedZoneName: "goatchess.com"
   }
