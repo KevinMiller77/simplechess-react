@@ -1,0 +1,23 @@
+{
+    "local": {
+        "domains": {
+            "APIG": "api.local.goatchess.com",
+            "WS": "ws.local.goatchess.com",
+            "FRONT": "local.goatchess.com"
+        }
+    },
+    "dev": {
+        "domains": {    
+            "APIG": "api.dev.goatchess.com",
+            "WS": "ws.dev.goatchess.com",
+            "FRONT": "dev.goatchess.com"
+        }
+    },
+    "prod": {
+        "domains": {
+            "APIG": "api.goatchess.com",
+            "WS": "ws.goatchess.com",
+            "FRONT": "goatchess.com"
+        }
+    }
+}

@@ -3,12 +3,15 @@ backend:
   phases:
     build:
       commands:
+        - echo "AWS_BRANCH=$AWS_BRANCH" >> .env
         - npm ci --cache .npm --prefer-offline
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
     build:
       commands:
+        - echo "Setting stage as $STAGE"
+        - echo "STAGE=$STAGE" >> .env
         - npm run build
   artifacts:
     baseDirectory: dist

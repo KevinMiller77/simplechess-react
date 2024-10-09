@@ -1,5 +1,5 @@
-import { HandshakeMessage, Message, MessageTypeEnum, JoinGameQueueMessage as JoinPoolMessage, SimpleMove, MoveMessage, ResignMessage } from "../common/enums";
-import { parseMessage, stringifyMessage } from "../common/utils";
+import { HandshakeMessage, Message, MessageTypeEnum, JoinGameQueueMessage as JoinPoolMessage, SimpleMove, MoveMessage, ResignMessage } from "../../amplify/src/common/enums";
+import { parseMessage, stringifyMessage } from "../../amplify/src/common/utils";
 
 interface WebSocketClientProps {
     host: string;

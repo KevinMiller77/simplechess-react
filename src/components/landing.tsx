@@ -2,12 +2,13 @@ import { Component } from 'react';
 import 'react-tabs/style/react-tabs.css';
 import '../css/Landing.css';
 import { Authenticator } from '@aws-amplify/ui-react';
-import { getCurrentUser, signOut } from 'aws-amplify/auth';
+import { AuthUser, getCurrentUser, signOut } from 'aws-amplify/auth';
 import { ChessConnectionClient } from '../logic/websocket-client';
 import { Hub } from 'aws-amplify/utils';
-import { Message, MessageTypeEnum, MoveMessage, ReconnectedMessage, ReconnectionState, SimpleMove, StartGameMessage } from '../common/enums';
+import { Message, MessageTypeEnum, MoveMessage, ReconnectedMessage, ReconnectionState, SimpleMove, StartGameMessage } from '../../amplify/src/common/enums';
 import { Chess, Color } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
+import { GOATCHESS_STAGE_CONFIG } from '../../amplify/src/common/stage-config';
 
 interface LandingProps {
 }
@@ -33,64 +34,49 @@ class Landing extends Component<LandingProps, LandingState> {
       playerColor: 'w',
     };
 
-    getCurrentUser().then(user => {
-      if (user && !this.state.client) {
-        this.setState(
-          { 
-            userId: user.userId,
-            client: new ChessConnectionClient(
-              {
-                host: 'ws://54.198.193.86:8765',
-                userId: user.userId,
-                handleMessage: this.handleMessage,
-              }
-            )
-          }
-        );
-      }
-    }).catch(() => {});
+    getCurrentUser().then(this.onUserSignIn).catch((e) => {
+      console.log('Error getting current user', e);
+    });
 
     Hub.listen('auth', ( { payload } ) => {
       switch (payload.event) {
         case 'signedIn':
-          console.log('user have been signedIn successfully.');
-          this.setState(
-            { 
-              userId: payload.data.userId,
-              client: new ChessConnectionClient(
-                {
-                  host: 'ws://54.198.193.86:8765',
-                  userId: payload.data.userId,
-                  handleMessage: () => console.log('Message received'),
-                }
-              )
-            }
-          );
+          this.onUserSignIn(payload.data);
           break;
         case 'signedOut':
-          console.log('user have been signedOut successfully.');
-          if (this.state.client) {
-            this.state.client.close();
-          }
-          this.setState({ userId: '', client: null });
-          break;
-        case 'tokenRefresh':
-          console.log('auth tokens have been refreshed.');
-          break;
-        case 'tokenRefresh_failure':
-          console.log('failure while refreshing auth tokens.');
-          break;
-        case 'signInWithRedirect':
-          console.log('signInWithRedirect API has successfully been resolved.');
-          break;
-        case 'signInWithRedirect_failure':
-          console.log('failure while trying to resolve signInWithRedirect API.');
-          break;
-        case 'customOAuthState':
-          console.log('custom state returned from CognitoHosted UI');
+          this.onUserSignOut();
           break;
       }
     });
+  }
+
+  onUserSignIn = (user: AuthUser) => {
+    if (!this.state.client) {
+      const wsAddress = "wss://" + GOATCHESS_STAGE_CONFIG[ process.env.STAGE ?? "local" ].domains.WS
+      console.log(`User detected. Connecting to websocket... address is ${wsAddress}`);
+      this.setState(
+        { 
+          userId: user.userId,
+          client: new ChessConnectionClient(
+            {
+              host: wsAddress,
+              userId: user.userId,
+              handleMessage: this.handleMessage,
+            }
+          )
+        }
+      );
+    } else {
+      console.log('User detected but client already exists. Skipping creation');
+    }
+  }
+
+  onUserSignOut = () => {
+    console.log('User signOut detected. Closing websocket connection.');
+    if (this.state.client) {
+      this.state.client.close();
+    }
+    this.setState({ userId: '', client: null });
   }
 
   handleMessage = (message: Message) => {
